@@ -194,5 +194,5 @@ export namespace Character {
   export function isLetter(ch: number): boolean {
     // TODO: Unicode?
     return isAnsiLetter(ch);
-  } 
+  }
 }

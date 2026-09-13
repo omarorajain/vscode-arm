@@ -26,4 +26,3 @@ export class MissingItemError extends ParseErrorImpl {
     super(errorType, ErrorLocation.AfterToken, token);
   }
 }
-

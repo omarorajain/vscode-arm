@@ -21,7 +21,7 @@ export function verifyTokenNode(
   docText: TextProvider,
   tokenType: TokenType,
   expectedText: string,
-  tokenSubType?: TokenSubType
+  tokenSubType?: TokenSubType,
 ) {
   expect(isTokenNode(n)).toBe(true);
   const tn = n as TokenNode;

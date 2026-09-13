@@ -270,7 +270,7 @@ export class Tokenizer {
     const start = this._cs.position;
     this._cs.moveToNextChar();
     this._cs.skipNonWsSequence(
-      (ch: number): boolean => Character.isAnsiLetter(ch) || Character.isDecimal(ch) || ch === Char.Underscore
+      (ch: number): boolean => Character.isAnsiLetter(ch) || Character.isDecimal(ch) || ch === Char.Underscore,
     );
 
     const length = this._cs.position - start;

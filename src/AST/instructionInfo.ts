@@ -12,7 +12,7 @@ class InstructionInfoImpl implements InstructionInfo {
   public condition: string = ''; // NE/Z/...
   public specifier: string = ''; // Width, like .W or .N r a datatype, such as NEON .I16, etc.
   public description: string;
-  public file: string // ARM documentation source file.
+  public file: string; // ARM documentation source file.
   public isValid = true;
 
   constructor(fullName: string) {

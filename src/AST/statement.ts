@@ -23,7 +23,7 @@ export abstract class StatementImpl extends AstNodeImpl implements Statement {
 
   constructor(label: TokenNode | undefined) {
     super();
-    if(label) {
+    if (label) {
       label.parent = this;
     }
     this._label = label;

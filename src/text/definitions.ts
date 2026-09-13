@@ -158,7 +158,7 @@ export interface TextRangeCollection<T extends TextRange> extends TextRange {
    * @param position - Position in a text buffer
    * @returns Item index or -1 if not found
    */
-  getFirstItemAfterOrAtPosition(position: number) 
+  getFirstItemAfterOrAtPosition(position: number);
 }
 
 // Abstracts character iteraction over text source.

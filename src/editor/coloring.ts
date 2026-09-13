@@ -64,7 +64,7 @@ export const semanticTokensLegend = new SemanticTokensLegend(tokenTypes, tokenMo
 export async function provideSemanticTokens(
   td: TextDocument,
   options: ColorOptions,
-  ct: CancellationToken
+  ct: CancellationToken,
 ): Promise<SemanticTokens | undefined> {
   const ed = RDT.getEditorDocument(td);
   if (!ed || !options.showColors) {
@@ -172,7 +172,7 @@ export async function provideSemanticTokens(
           r.start.character,
           r.end.character - r.start.character,
           itemColor,
-          itemModifier
+          itemModifier,
         );
       });
     }

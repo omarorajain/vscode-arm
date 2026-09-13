@@ -5,7 +5,7 @@ import { StringReader } from '../../text/stringReader';
 
 export function compareLines(
   expected: string,
-  actual: string
+  actual: string,
 ): { expectedLine: string | undefined; actualLine: string | undefined; index: number; lineNumber: number } {
   const actualReader = new StringReader(actual);
   const expectedReader = new StringReader(expected);

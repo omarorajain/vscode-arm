@@ -24,7 +24,7 @@ export class AstWriter {
       this._chunks.push('\n');
       ast.errors.forEach((e) => {
         this._chunks.push(
-          `Error: ${getParseErrorMessage(e.errorType, ast.instructionSet)}, range [${e.start}...${e.end})`
+          `Error: ${getParseErrorMessage(e.errorType, ast.instructionSet)}, range [${e.start}...${e.end})`,
         );
       });
     }
@@ -41,7 +41,7 @@ export class AstWriter {
   private writeChunks(node: AstNode): void {
     this._chunks = [];
     this._indent = 0;
-   
+
     node.children.asArray().forEach((e) => {
       this.writeNode(e);
     });

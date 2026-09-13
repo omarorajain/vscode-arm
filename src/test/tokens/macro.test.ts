@@ -1,8 +1,8 @@
 // Copyright (c) Mikhail Arkhipov. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-import { TokenType, TokenSubType, A32Set } from "../../tokens/definitions";
-import { TokenTest } from "../utility/tokenTest";
+import { TokenType, TokenSubType, A32Set } from '../../tokens/definitions';
+import { TokenTest } from '../utility/tokenTest';
 
 test('mov	r2, R\\reg', () => {
   const code = String.raw`
@@ -54,7 +54,7 @@ test('symbol with backslash()', () => {
   const code = String.raw`
   .macro
   \base\().\length
-`
+`;
   const actual = TokenTest.tokenizeToArray(code);
   TokenTest.verifyTokenTypes(actual, [
     TokenType.EndOfLine,

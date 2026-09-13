@@ -113,5 +113,5 @@ export class AstNodeImpl implements AstNode {
 
   public toString(): string {
     return `Node: [${this.start}...${this.end})`;
-  };
+  }
 }

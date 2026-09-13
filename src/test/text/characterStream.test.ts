@@ -1,24 +1,24 @@
 // Copyright (c) Mikhail Arkhipov. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-import { Char } from "../../text/charCodes";
-import { CharacterStream } from "../../text/characterStream";
-import { TextStream } from "../../text/textStream";
+import { Char } from '../../text/charCodes';
+import { CharacterStream } from '../../text/characterStream';
+import { TextStream } from '../../text/textStream';
 
-test("CharacterStream empty", () => {
-  const cs = new CharacterStream(new TextStream(""));
+test('CharacterStream empty', () => {
+  const cs = new CharacterStream(new TextStream(''));
   expect(cs.length).toBe(0);
   expect(cs.position).toBe(0);
   expect(cs.isAtNewLine()).toBe(false);
   expect(cs.isEndOfStream()).toBe(true);
-  expect(cs.isWhiteSpace()).toBe(false); 
+  expect(cs.isWhiteSpace()).toBe(false);
 
-  cs.advance(1); 
+  cs.advance(1);
   expect(cs.position).toBe(0);
   expect(cs.isAtNewLine()).toBe(false);
   expect(cs.isEndOfStream()).toBe(true);
 
-  cs.skipLineBreak(); 
+  cs.skipLineBreak();
   expect(cs.position).toBe(0);
   expect(cs.isAtNewLine()).toBe(false);
   expect(cs.isEndOfStream()).toBe(true);
@@ -49,13 +49,13 @@ test("CharacterStream empty", () => {
   expect(cs.isEndOfStream()).toBe(true);
 });
 
-test("CharacterStream space", () => {
-  const cs = new CharacterStream(new TextStream(" "));
+test('CharacterStream space', () => {
+  const cs = new CharacterStream(new TextStream(' '));
   expect(cs.length).toBe(1);
   expect(cs.position).toBe(0);
   expect(cs.isAtNewLine()).toBe(false);
   expect(cs.isEndOfStream()).toBe(false);
-  expect(cs.isWhiteSpace()).toBe(true); 
+  expect(cs.isWhiteSpace()).toBe(true);
 
   cs.moveToNextChar();
   expect(cs.position).toBe(1);
@@ -63,13 +63,13 @@ test("CharacterStream space", () => {
   expect(cs.isEndOfStream()).toBe(true);
 });
 
-test("CharacterStream tab", () => {
-  const cs = new CharacterStream(new TextStream("\t"));
+test('CharacterStream tab', () => {
+  const cs = new CharacterStream(new TextStream('\t'));
   expect(cs.length).toBe(1);
   expect(cs.position).toBe(0);
   expect(cs.isAtNewLine()).toBe(false);
   expect(cs.isEndOfStream()).toBe(false);
-  expect(cs.isWhiteSpace()).toBe(true); 
+  expect(cs.isWhiteSpace()).toBe(true);
 
   cs.moveToNextChar();
   expect(cs.position).toBe(1);
@@ -77,13 +77,13 @@ test("CharacterStream tab", () => {
   expect(cs.isEndOfStream()).toBe(true);
 });
 
-test("CharacterStream line feed", () => {
-  const cs = new CharacterStream(new TextStream(" \n"));
+test('CharacterStream line feed', () => {
+  const cs = new CharacterStream(new TextStream(' \n'));
   expect(cs.length).toBe(2);
   expect(cs.position).toBe(0);
   expect(cs.isAtNewLine()).toBe(false);
   expect(cs.isEndOfStream()).toBe(false);
-  expect(cs.isWhiteSpace()).toBe(true); 
+  expect(cs.isWhiteSpace()).toBe(true);
 
   cs.moveToNextChar();
   expect(cs.position).toBe(1);
@@ -96,13 +96,13 @@ test("CharacterStream line feed", () => {
   expect(cs.isEndOfStream()).toBe(true);
 });
 
-test("CharacterStream carriage return", () => {
-  const cs = new CharacterStream(new TextStream("\r\n"));
+test('CharacterStream carriage return', () => {
+  const cs = new CharacterStream(new TextStream('\r\n'));
   expect(cs.length).toBe(2);
   expect(cs.position).toBe(0);
   expect(cs.isAtNewLine()).toBe(true);
   expect(cs.isEndOfStream()).toBe(false);
-  expect(cs.isWhiteSpace()).toBe(true); 
+  expect(cs.isWhiteSpace()).toBe(true);
 
   cs.moveToNextChar();
   expect(cs.position).toBe(1);
@@ -120,18 +120,18 @@ test("CharacterStream carriage return", () => {
   expect(cs.isEndOfStream()).toBe(true);
 });
 
-test("CharacterStream text", () => {
-  const text = "a bc\n\tdef";
+test('CharacterStream text', () => {
+  const text = 'a bc\n\tdef';
   const cs = new CharacterStream(new TextStream(text));
   expect(cs.length).toBe(text.length);
   expect(cs.position).toBe(0);
   expect(cs.currentChar).toBe(Char.a);
-  
+
   cs.skipToWhitespace();
   expect(cs.position).toBe(1);
   expect(cs.currentChar).toBe(Char.Space);
 
-  cs.advance(-10)
+  cs.advance(-10);
   expect(cs.position).toBe(0);
   cs.moveToNextChar();
   cs.skipWhitespace();
@@ -153,13 +153,13 @@ test("CharacterStream text", () => {
   expect(cs.nextChar).toBe(Char.d);
 });
 
-test("CharacterStream EOL", () => {
-  const text = "a\r\n\r\nb";
+test('CharacterStream EOL', () => {
+  const text = 'a\r\n\r\nb';
   const cs = new CharacterStream(new TextStream(text));
   expect(cs.length).toBe(text.length);
   expect(cs.position).toBe(0);
   expect(cs.currentChar).toBe(Char.a);
-  
+
   cs.moveToEol();
   expect(cs.position).toBe(1);
   expect(cs.currentChar).toBe(Char.CarriageReturn);

@@ -55,7 +55,7 @@ export enum TokenSubType {
   Include = 10, // .include
   MacroName = 11,
   MacroParameter = 12, // parameter to a macro
-  MacroLabelReference = 13 // label reference in a macro
+  MacroLabelReference = 13, // label reference in a macro
 }
 
 /**
@@ -83,8 +83,7 @@ export namespace Token {
 
   export function isVariable(t: Token): boolean {
     return (
-      t.type === TokenType.Symbol &&
-      (t.subType === TokenSubType.Declaration || t.subType === TokenSubType.Reference)
+      t.type === TokenType.Symbol && (t.subType === TokenSubType.Declaration || t.subType === TokenSubType.Reference)
     );
   }
 

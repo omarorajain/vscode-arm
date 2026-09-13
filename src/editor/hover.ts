@@ -11,7 +11,7 @@ import { getInstructionInfo } from '../AST/instructionInfo';
 export async function provideHover(
   td: TextDocument,
   position: Position,
-  ct: CancellationToken
+  ct: CancellationToken,
 ): Promise<Hover | undefined> {
   const ed = RDT.getEditorDocument(td);
   if (!ed || !getSetting<boolean>(Settings.showHover, true)) {
@@ -48,8 +48,8 @@ function getInstructionDocumentation(instructionName: string, instructionSet: st
     return new MarkdownString(
       `#### ${pi.name}\n\n${pi.description}\n\n[Open documentation](${getInstructionDocumentationUrl(
         instructionName,
-        instructionSet
-      )})`
+        instructionSet,
+      )})`,
     );
   }
 }

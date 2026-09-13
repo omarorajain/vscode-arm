@@ -1,15 +1,15 @@
 // Copyright (c) Mikhail Arkhipov. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-import { Token, TokenType } from "../../tokens/definitions";
-import { TokenStream } from "../../tokens/tokenStream";
-import { TokenImpl } from "../../tokens/tokens";
+import { Token, TokenType } from '../../tokens/definitions';
+import { TokenStream } from '../../tokens/tokenStream';
+import { TokenImpl } from '../../tokens/tokens';
 
 function createTokenStream(tokens: Token[]): TokenStream {
   return new TokenStream(tokens);
 }
 
-test("TokenStream empty", () => {
+test('TokenStream empty', () => {
   const tokens: Token[] = [];
   const ts = createTokenStream(tokens);
 
@@ -43,7 +43,7 @@ test("TokenStream empty", () => {
   expect(ts.position).toBe(0);
 });
 
-test("TokenStream test 1", () => {
+test('TokenStream test 1', () => {
   const tokens: Token[] = [
     new TokenImpl(TokenType.Comma, 0, 1),
     new TokenImpl(TokenType.LineComment, 3, 1),

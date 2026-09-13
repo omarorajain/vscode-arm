@@ -2,7 +2,14 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 import * as asmDirectives from '../instruction_sets/directives-gas.json';
-import { TextDocument, Position, CompletionContext, CompletionItem, CompletionItemKind, CancellationToken } from 'vscode';
+import {
+  TextDocument,
+  Position,
+  CompletionContext,
+  CompletionItem,
+  CompletionItemKind,
+  CancellationToken,
+} from 'vscode';
 import { getDirectiveDocumentation } from './documentation';
 import { RDT } from './rdt';
 import { EditorDocument } from './document';
@@ -14,7 +21,7 @@ export function provideCompletions(
   td: TextDocument,
   position: Position,
   context: CompletionContext,
-  ct: CancellationToken
+  ct: CancellationToken,
 ): CompletionItem[] {
   const ed = RDT.getEditorDocument(td);
   if (!ed) {
@@ -47,7 +54,7 @@ function handleDirectivesCompletion(
   ed: EditorDocument,
   offset: number,
   tokenIndex: number,
-  context: CompletionContext
+  context: CompletionContext,
 ): CompletionItem[] {
   let comps: CompletionItem[] = [];
 
@@ -83,7 +90,7 @@ function handleDirectivesCompletion(
     if (getSetting<boolean>(Settings.completionShowAdvancedDirectives, false)) {
       const dirs = Object.keys(asmDirectives['directives-advanced']);
       comps.push(
-        ...dirs.map((e) => new CompletionItem(uc ? e.toUpperCase() : e.toLowerCase(), CompletionItemKind.Keyword))
+        ...dirs.map((e) => new CompletionItem(uc ? e.toUpperCase() : e.toLowerCase(), CompletionItemKind.Keyword)),
       );
     }
   }

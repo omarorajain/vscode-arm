@@ -35,7 +35,7 @@ export namespace TokenTest {
       expect(actual[i].type).toBe(expected[i]);
     }
   }
-  
+
   export function verifyTokenSubTypes(actual: readonly Token[], expected: readonly TokenSubType[]): void {
     expect(actual.length).toBe(expected.length);
     for (let i = 0; i < actual.length; i++) {

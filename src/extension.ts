@@ -61,7 +61,7 @@ function registerCapabilities(context: ExtensionContext): void {
           return resolveCompletionItem(item, token);
         },
       },
-      '.'
+      '.',
     ),
     // Hover tooltip
     languages.registerHoverProvider(languageName, {
@@ -78,8 +78,8 @@ function registerCapabilities(context: ExtensionContext): void {
           return provideSemanticTokens(document, colorOptions, ct);
         },
       },
-      semanticTokensLegend
-    )
+      semanticTokensLegend,
+    ),
   );
 }
 
@@ -93,7 +93,7 @@ function registerEditorEvents(context: ExtensionContext) {
     }),
     workspace.onDidChangeConfiguration((e) => {
       onSettingsChange();
-    })
+    }),
   );
 
   workspace.textDocuments.forEach((e) => {
@@ -105,7 +105,7 @@ function registerEditorEvents(context: ExtensionContext) {
 
 function registerCommands(context: ExtensionContext): void {
   context.subscriptions.push(
-    commands.registerCommand('arm.openCurrentItemDocumentation', openCurrentItemDocumentation)
+    commands.registerCommand('arm.openCurrentItemDocumentation', openCurrentItemDocumentation),
     // commands.registerCommand('arm.convertHtmlToIndex', convertHtmlToIndex)
   );
 }

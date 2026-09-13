@@ -20,7 +20,7 @@ export function getDirectiveDocumentationUrl(directiveName: string): string {
 // Fetches GAS/GCC directive docs from online source.
 export async function getDirectiveDocumentation(
   directiveName: string,
-  ct: CancellationToken
+  ct: CancellationToken,
 ): Promise<MarkdownString | undefined> {
   const docUrl = getDirectiveDocumentationUrl(directiveName);
   const deferred = createDeferred<MarkdownString | undefined>();

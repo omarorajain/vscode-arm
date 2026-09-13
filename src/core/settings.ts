@@ -10,7 +10,7 @@ export namespace Settings {
   // Coloring
   export const showColors = 'arm.color.show';
   // Formatting options
-  export const labelsOnSeparateLines = "arm.formatting.labelsOnSeparateLines";
+  export const labelsOnSeparateLines = 'arm.formatting.labelsOnSeparateLines';
   export const formattingAlignOperands = 'arm.formatting.alignOperands';
   export const formattingAlignEolComments = 'arm.formatting.alignEndOfLineComments';
   export const formattingSpaceAfterComma = 'arm.formatting.spaceAfterComma';

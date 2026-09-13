@@ -17,8 +17,8 @@ export function getParseErrorMessage(errorType: ParseErrorType, instructionSet: 
       return 'Register expected.';
     case ParseErrorType.SymbolExpected:
       return 'Symbol expected.';
-    case ParseErrorType.SymbolNameExpected:      
-    return 'Symbol name expected.';
+    case ParseErrorType.SymbolNameExpected:
+      return 'Symbol name expected.';
     case ParseErrorType.StringExpected:
       return 'String expected.';
     case ParseErrorType.UnexpectedToken:

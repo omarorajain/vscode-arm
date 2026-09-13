@@ -91,7 +91,7 @@ export class NumberTokenizer {
     }
 
     // Verify octals. If a number starts with zero and yet it is not
-    // recognized as hex, binary or float, it may be octal. Decimals 
+    // recognized as hex, binary or float, it may be octal. Decimals
     // cannot start with 0. See if this is really octal.
     if (!isFloat && numberLength > 0 && startChar === Char._0) {
       this._cs.position = start;

@@ -7,8 +7,6 @@ import { createAst, verifyAst, verifyAstTokens, verifyTokenNode } from '../utili
 
 test('Simple A32 instruction', () => {
   const root = createAst('add r1, r2, #1', A32Set);
-  let child: AstNode;
-
   expect(root).toBeDefined();
   expect(root.children.count).toBe(1);
 
@@ -17,7 +15,7 @@ test('Simple A32 instruction', () => {
 
   const s = c1 as Statement;
   expect(s.children.count).toBe(6); // name and list of operands
-  child = s.children.getItemAt(0);
+  const child = s.children.getItemAt(0);
   let tn = child as TokenNode;
   verifyTokenNode(tn, root.text, TokenType.Symbol, 'add', TokenSubType.Instruction);
 

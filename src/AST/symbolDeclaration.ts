@@ -16,7 +16,7 @@ export class DeclarationDirectiveStatementImpl extends SymbolStatementImpl {
   public parse(context: ParseContext, parent?: AstNode | undefined): boolean {
     this._name = TokenNodeImpl.create(context, this);
     // TODO: the label ends with : while reference to it does not.
-    let symbolName = this._label; 
+    let symbolName = this._label;
     // Now check if there is label on this or preceding statement.
     // 'label: .word 0' and 'label:\n .word 0'.
     if (!symbolName) {

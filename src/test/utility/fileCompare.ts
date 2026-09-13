@@ -11,10 +11,14 @@ export function compareFiles(expected: string, actual: string): void {
   for (let i = 0; i < count; i++) {
     expect(actualLines[i].trimEnd(), `Line ${i + 1} is different`).toBe(expectedLines[i].trimEnd());
   }
-  
-  if(actualLines.length > expectedLines.length) {
-    expect(actualLines.length, `Actual file is ${actualLines.length - expectedLines.length} lines longer`).toBe(expected.length);
-  } else if(actualLines.length < expectedLines.length) {
-    expect(actualLines.length, `Actual file is ${expectedLines.length - actualLines.length} lines shorter`).toBe(expected.length);
+
+  if (actualLines.length > expectedLines.length) {
+    expect(actualLines.length, `Actual file is ${actualLines.length - expectedLines.length} lines longer`).toBe(
+      expected.length,
+    );
+  } else if (actualLines.length < expectedLines.length) {
+    expect(actualLines.length, `Actual file is ${expectedLines.length - actualLines.length} lines shorter`).toBe(
+      expected.length,
+    );
   }
 }

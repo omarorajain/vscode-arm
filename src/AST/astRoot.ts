@@ -83,9 +83,7 @@ export class AstRootImpl extends AstNodeImpl implements AstRoot {
   }
 
   public get labels(): readonly Token[] {
-    return this.statements
-      .filter((s) => s.label)
-      .map((s) => s.label!.token);
+    return this.statements.filter((s) => s.label).map((s) => s.label!.token);
   }
 
   public get statements(): readonly Statement[] {
@@ -97,14 +95,14 @@ export class AstRootImpl extends AstNodeImpl implements AstRoot {
 
   public toString(): string {
     return `Root: [${this.start}...${this.end})`;
-  };
+  }
 }
 
 function createStatement(context: ParseContext): StatementImpl {
   let label: TokenNode | undefined;
   if (context.currentToken.type === TokenType.Label) {
     // Don't set parent yet, the label belongs to the statement.
-    label = TokenNodeImpl.create(context, undefined); 
+    label = TokenNodeImpl.create(context, undefined);
   }
 
   switch (context.currentToken.type) {

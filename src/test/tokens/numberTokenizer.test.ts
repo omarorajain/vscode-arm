@@ -1,7 +1,7 @@
 // Copyright (c) Mikhail Arkhipov. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-import { TokenTest } from "../utility/tokenTest";
+import { TokenTest } from '../utility/tokenTest';
 
 test('Empty string', () => {
   const length = TokenTest.tokenizeNumber('');
@@ -151,4 +151,3 @@ test('NaN 2', () => {
   length = TokenTest.tokenizeNumber(s, 8);
   expect(length).toBe(0);
 });
-
