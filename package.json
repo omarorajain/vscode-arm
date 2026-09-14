@@ -2,7 +2,7 @@
   "name": "arm-assembly-editor-modern",
   "displayName": "ARM Assembly Editor (Modernized)",
   "description": "Modernized fork of Mikhail Arkhipov's ARM Assembly Language Editor with formatting fixes (IntelliSense, documentation tooltips, formatting, diagnostics and more). ",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Mikhail Arkhipov",
   "icon": "images/ArmIcon.png",
   "publisher": "omarorajain",
@@ -139,11 +139,12 @@
           },
           "arm.formatting.labelsCase": {
             "type": "string",
-            "default": "auto",
+            "default": "off",
             "enum": [
               "auto",
               "upper",
-              "lower"
+              "lower",
+              "off"
             ],
             "description": "Labels casing during formatting."
           },

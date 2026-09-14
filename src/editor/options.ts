@@ -12,7 +12,7 @@ export interface FormatOptions {
   spaceAroundOperators: boolean;
   alignOperands: boolean;
   alignEolComments: boolean;
-  uppercaseLabels: boolean;
+  uppercaseLabels?: boolean;
   uppercaseDirectives: boolean;
   uppercaseInstructions: boolean;
   uppercaseRegisters: boolean;

@@ -156,29 +156,40 @@ export function getFormatOptions(documentText: string, tokens: readonly Token[])
   const detectedStyle = detectCasingStyle(documentText, tokens);
   let alignOperands = true;
 
-  let uppercaseLabels = false;
+  let uppercaseLabels: boolean | undefined = undefined;
   let uppercaseDirectives = false;
   let uppercaseInstructions = true;
   let uppercaseRegisters = false;
 
-  if (
+  // Handle Label Casing
+  if (labelsCaseSetting === 'upper') {
+    uppercaseLabels = true;
+  } else if (labelsCaseSetting === 'lower') {
+    uppercaseLabels = false;
+  } else if (
     labelsCaseSetting === 'auto' &&
     (detectedStyle.labels === CasingType.Upper || detectedStyle.labels === CasingType.Lower)
   ) {
     uppercaseLabels = detectedStyle.labels === CasingType.Upper;
   }
+
+  // Handle Directive Casing
   if (
     directivesCaseSetting === 'auto' &&
     (detectedStyle.directives === CasingType.Upper || detectedStyle.directives === CasingType.Lower)
   ) {
     uppercaseDirectives = detectedStyle.directives === CasingType.Upper;
   }
+  
+  // Handle Instruction Casing
   if (
     instructionsCaseSetting === 'auto' &&
     (detectedStyle.instructions === CasingType.Upper || detectedStyle.instructions === CasingType.Lower)
   ) {
     uppercaseInstructions = detectedStyle.instructions === CasingType.Upper;
   }
+  
+  // Handle Register Casing
   if (
     registersCaseSetting === 'auto' &&
     (detectedStyle.registers === CasingType.Upper || detectedStyle.registers === CasingType.Lower)
