@@ -6,7 +6,6 @@ import { CancellationToken, MarkdownString } from 'vscode';
 import { getInstructionInfo } from '../AST/instructionInfo';
 import { createDeferred } from '../core/deferred';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const TurndownService = require('turndown');
 let turndownService: any;
 
@@ -40,7 +39,6 @@ export async function getDirectiveDocumentation(
           deferred.resolve(markdown);
         });
     });
-    // eslint-disable-next-line no-empty
   } catch {
     deferred.reject();
   }

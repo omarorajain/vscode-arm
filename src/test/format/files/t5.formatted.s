@@ -5,44 +5,44 @@
 #
 
 #define __ASSEMBLY__
-.macro VLOAD x
+    .macro VLOAD x
     vld1.64     {q\x}, [r0]!
     vrev32.8    q\x, q\x
-.endm
-.macro HASH x
+    .endm
+    .macro HASH x
     vmov        q7, q\x
     bl          hs
-.endm
-.macro RMW x
+    .endm
+    .macro RMW x
     ldr         r0, [r1, #-4]
     add         r0, r0, r\x
     str         r0, [r1, #-4]!
-.endm
-.macro ROR d s b
+    .endm
+    .macro ROR d s b
     vshr.u32    \d, \s, #\b
     vsli.u32    \d, \s, #(32-\b)
-.endm
-.macro LSR d s b
+    .endm
+    .macro LSR d s b
     vshr.u32    \d, \s, #\b
-.endm
-.macro XOR d s
+    .endm
+    .macro XOR d s
     veor.u32    \d, \d, \s
-.endm
-.macro VAD d s
+    .endm
+    .macro VAD d s
     vadd.u32    \d, \d, \s
-.endm
-.macro REV4
+    .endm
+    .macro REV4
     ldmia       r0, {r1 - r4}
     rev         r1, r1
     rev         r2, r2
     rev         r3, r3
     rev         r4, r4
     stmia       r0, {r1 - r4}
-.endm
+    .endm
 
-.data
-.globl k, h
-.balign 32
+    .data
+    .globl k, h
+    .balign 32
 k:
     .word 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5
     .word 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5
@@ -64,12 +64,12 @@ h:
     .word 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a
     .word 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
 
-.bss
-.balign 32
+    .bss
+    .balign 32
 w:
     .           = . + 256
 
-.text
+    .text
 hs:
     push        {r1, r12}
     add         r12, r0, #16
@@ -126,7 +126,7 @@ hs:
     pop         {r1, r12}
     mov         pc, lr
 
-.globl sha256_update
+    .globl sha256_update
 sha256_update:
     push        {r4 - r11, lr}
     vpush       {q4 - q7}
@@ -205,7 +205,7 @@ sha256_update:
 #
 # uint8_t *sha256_final(struct sha256_context *context) 
 #
-.globl sha256_final
+    .globl sha256_final
 sha256_final:
     push        {lr}
 
@@ -264,7 +264,7 @@ sha256_final:
 #
 # sha256_progress(struct sha256_context *context, uint8_t data[], uint32_t len)
 #
-.globl sha256_progress
+    .globl sha256_progress
 sha256_progress:
     push        {r4 - r7, lr}
     ldr         r3, [r0, #CTX_LEN]
@@ -309,7 +309,7 @@ sha256_progress:
 #         uint32_t datalen;
 # };
 #
-.globl sha256_init
+    .globl sha256_init
 sha256_init:
     add         r0, r0, #CTX_STA
     ldr         r1, =h

@@ -19,6 +19,6 @@ function detectSet(fileName: string): string {
   const documentText = fs.readFileSync(filePath, 'utf-8');
 
   const t = new Tokenizer(A64Set);
-  let tokens = t.tokenize(new TextStream(documentText));
+  const tokens = t.tokenize(new TextStream(documentText));
   return detectInstructionSet(documentText, tokens);
 }

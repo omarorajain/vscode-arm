@@ -32,11 +32,11 @@ export function detectInstructionSet(documentText: string, tokens: readonly Toke
   let score64 = symbols.filter((s) => isRegisterName(s, A64Set)).length;
 
   symbols.forEach((s) => {
-    let info = findInstructionInfo(s, A32Set);
+    const info = findInstructionInfo(s, A32Set);
     if (info) {
       score32++;
     } else {
-      let info = findInstructionInfo(s, A64Set);
+      const info = findInstructionInfo(s, A64Set);
       if (info) {
         score64++;
       }
@@ -204,7 +204,7 @@ export function detectIndentation(text: string, tokens: readonly Token[], option
     operandsIndent = -1;
   }
 
-  let dataDirectivesIndent = Math.ceil((maxDataDirectiveLabelLength + 1) / tabSize) * tabSize;
+  const dataDirectivesIndent = Math.ceil((maxDataDirectiveLabelLength + 1) / tabSize) * tabSize;
   let dataDirectivesOperandIndent = dataDirectivesIndent;
   if (maxDataDirectiveLength > 0) {
     dataDirectivesOperandIndent = dataDirectivesIndent + maxDataDirectiveLength;

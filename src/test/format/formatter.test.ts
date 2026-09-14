@@ -73,9 +73,9 @@ test('Conditional preprocessor', async () => {
 .err
 .endif
   `);
-  expect(result).toBe(String.raw`.ifdef SYM
-.err
-.endif
+  expect(result).toBe(String.raw`    .ifdef SYM
+    .err
+    .endif
 `);
 });
 
@@ -149,7 +149,7 @@ test('Multiline block comment', async () => {
     String.raw`
      /*write syscall*/
     mov   x0, #1 
-`
+`,
   );
   expect(result).toBe(String.raw`
     /*write syscall*/
@@ -163,7 +163,7 @@ test('EOL comment group', async () => {
     mov r0,  #7   @i = 7
    mov r1, #0     @c = 0
      mov r2,#7     @a = 7
-`
+`,
   );
   expect(result).toBe(String.raw`
     mov r0, #7    @i = 7
@@ -175,14 +175,15 @@ test('EOL comment group', async () => {
 test('EOL comment group with tabs', async () => {
   const options = new FormatOptionsImpl();
   options.tabSize = 4;
-  const result = await format("\n\
+  const result = await format(
+    '\n\
 \tadd r1, r1, r2\t\t@c = c + a;\n\
 \tadd r2, #1\t\t@a++\n\
 \tadd r0, #1\t\t@i++\n\
 \tcmp r0, #6\t\t@is i > 6\n\
 \tbgt lessthan6\t\t@keep looping if i is greater than 6\n\
-\tblt exit\t\t@exit if i is less than 6\n",
-    options
+\tblt exit\t\t@exit if i is less than 6\n',
+    options,
   );
   expect(result).toBe(String.raw`
     add r1, r1, r2              @c = c + a;
@@ -202,7 +203,7 @@ test('.EQU N, 100', async () => {
      .equ	N,  100
    mov x0, #1
 `,
-    fo
+    fo,
   );
   expect(result).toBe(String.raw`
     .EQU N, 100
@@ -258,7 +259,7 @@ function formatFile(fileName: string): void {
   const documentText = fs.readFileSync(filePath, 'utf-8');
 
   const t = new Tokenizer(A64Set);
-  let tokens = t.tokenize(new TextStream(documentText));
+  const tokens = t.tokenize(new TextStream(documentText));
   const instructionSet = detectInstructionSet(documentText, tokens);
 
   const formatter = new Formatter();

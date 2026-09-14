@@ -1,12 +1,12 @@
 @Program written by Hamed Adefuwa
 @Part of computer architecture university module
 
-.data
-.balign 4
+    .data
+    .balign 4
 return: .word   0
 
-.text
-.global main
+    .text
+    .global main
 @ ---------------------------------------------------------------------------------------------
 
 @Here's the program in C

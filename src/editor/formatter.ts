@@ -162,7 +162,15 @@ export class Formatter {
     // Regular directive: on its own line.
     if (labelToken) {
       this.appendToken(labelToken, this._options.uppercaseLabels);
-      this.completeCurrentLine();
+      if (this._options.labelsOnSeparateLines) {
+        this.completeCurrentLine();
+        this._lineParts.push(makeWhitespace(this._instructionIndent));
+      } else {
+        this._lineParts.push(makeWhitespace(this._instructionIndent - labelToken.length));
+      }
+    } else {
+      // Apply the auto-detected instruction indent to standard directives
+      this._lineParts.push(makeWhitespace(this._instructionIndent));
     }
     this.appendToken(directiveToken, this._options.uppercaseDirectives);
   }
@@ -185,7 +193,7 @@ export class Formatter {
     }
     this.appendToken(
       instructionToken,
-      instructionToken.subType === TokenSubType.Instruction ? this._options.uppercaseInstructions : undefined
+      instructionToken.subType === TokenSubType.Instruction ? this._options.uppercaseInstructions : undefined,
     );
   }
 
@@ -271,6 +279,15 @@ export class Formatter {
   }
 
   private appendLineComment() {
+    // Ignore AArch64 relocation modifiers
+    const ct = this._tokens.currentToken;
+    const text = this._text.getText(ct.start, ct.length).toUpperCase();
+    if (text.startsWith('@PAGE') || text.startsWith('@GOT') || text.startsWith('@LO12') || text.startsWith('@TPREL')) {
+      this.appendWhitespace();
+      this.appendToken(ct);
+      return;
+    }
+
     // Find out which group the comment belongs to
     if (this._lineParts.length === 0) {
       // Only align standalone comments
@@ -313,18 +330,27 @@ export class Formatter {
 
   private appendEndOfLineComment(): void {
     const group = this.findCommentGroup(this._tokens.position, false);
-    // Group of one is aligned 1 space after the line content.
-    if (group.indices.length === 1) {
-      this.appendWhitespace();
-      this.appendToken(this._tokens.currentToken);
-      return;
-    }
 
     let formattedLengthBeforeComment = 0;
     this._lineParts.forEach((p) => (formattedLengthBeforeComment += p.length));
 
     const mostCommonIndent = group.getMostCommonIndent();
-    const ws = Math.max(1, mostCommonIndent - formattedLengthBeforeComment);
+
+    // Standalone comments
+    if (group.indices.length === 1) {
+      const ws = Math.max(1, mostCommonIndent - formattedLengthBeforeComment);
+      this._lineParts.push(makeWhitespace(ws));
+      this.appendToken(this._tokens.currentToken);
+      return;
+    }
+
+    // Blocks of comments
+    let ws = mostCommonIndent - formattedLengthBeforeComment;
+
+    if (ws < 1) {
+      const nextTabStop = Math.ceil((formattedLengthBeforeComment + 2) / 8) * 8;
+      ws = nextTabStop - formattedLengthBeforeComment;
+    }
 
     this._lineParts.push(makeWhitespace(ws));
     this.appendToken(this._tokens.currentToken);
@@ -475,6 +501,13 @@ export class Formatter {
       case TokenType.CloseBracket:
       case TokenType.OpenCurly:
       case TokenType.CloseCurly:
+        // If the very next token is a comment, break out and add the space anyway.
+        if (
+          this._tokens.currentToken.type === TokenType.LineComment ||
+          this._tokens.currentToken.type === TokenType.BlockComment
+        ) {
+          break;
+        }
         return;
     }
     this._lineParts.push(' ');

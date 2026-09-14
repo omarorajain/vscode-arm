@@ -9,10 +9,10 @@
 // X8 - linux function number
 //
 
-.include "uppermacro.s"
+    .include "uppermacro.s"
 
-.global _start // Provide program starting address to linker
-.align 2
+    .global _start // Provide program starting address to linker
+    .align 2
 
 _start:
     // Convert tststr to uppercase
@@ -23,7 +23,7 @@ _start:
     MOV     X2, X0 // return code is the length of the string
 
     MOV     X0, #1 // 1 = StdOut
-    ADRP    X1, buffer    @PAGE // string to print
+    ADRP    X1, buffer @PAGE // string to print
     ADD     X1, X1, buffer @PAGEOFF
     MOV     X16, #4         // Unix write system call
     SVC     #0x80           // Call kernel to output the string
@@ -36,7 +36,7 @@ _start:
     MOV     X2, X0 // return code is the length of the string
 
     MOV     X0, #1 // 1 = StdOut
-    ADRP    X1, buffer    @PAGE // string to print
+    ADRP    X1, buffer @PAGE // string to print
     ADD     X1, X1, buffer @PAGEOFF
     MOV     X16, #4         // Unix write system call
     SVC     #0x80           // Call kernel to output the string
@@ -47,7 +47,7 @@ _start:
     MOV     X16, #1             // System call number 1 terminates this program
     SVC     #0x80               // Call kernel to terminate the program
 
-.data
+    .data
 tststr:     .asciz  "This is our Test String that we will convert.\n"
 tststr2:    .asciz  "A second string to upper case!!\n"
 buffer:     .fill   255, 1, 0

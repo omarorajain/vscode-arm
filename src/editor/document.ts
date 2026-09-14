@@ -29,7 +29,7 @@ export class EditorDocument {
 
   private _ast: AstRoot | undefined;
   private _instructionSet = A64Set;
-  private _formatOptions: FormatOptions;
+  private _formatOptions!: FormatOptions;
 
   constructor(td: TextDocument) {
     this._td = td;
@@ -127,7 +127,7 @@ export class EditorDocument {
           const d = new Diagnostic(
             range,
             getParseErrorMessage(e.errorType, this._instructionSet),
-            DiagnosticSeverity.Warning
+            DiagnosticSeverity.Warning,
           );
           diagnostics.push(d);
         });
@@ -153,7 +153,7 @@ export function getFormatOptions(documentText: string, tokens: readonly Token[])
   const registersCaseSetting = getSetting<string>(Settings.formattingRegistersCase, 'auto');
   const alignOperandsSetting = getSetting<string>(Settings.formattingAlignOperands, 'auto');
 
-  let detectedStyle = detectCasingStyle(documentText, tokens);
+  const detectedStyle = detectCasingStyle(documentText, tokens);
   let alignOperands = true;
 
   let uppercaseLabels = false;

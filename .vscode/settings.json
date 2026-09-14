@@ -1,8 +1,9 @@
 {
   "window.zoomLevel": 0,
-  "jest.autoRun": "off",
+  "jest.runMode": "on-save",
   "cSpell.words": [
     "Arkhipov",
     "writeback"
-  ]
+  ], 
+  "js/ts.tsdk.path": "node_modules/typescript-7/lib"
 }

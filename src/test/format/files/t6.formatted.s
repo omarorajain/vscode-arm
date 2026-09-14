@@ -3,10 +3,10 @@
 @ These macros preseve all registers.
 @ Beware they will change cpsr.
 
-.if A
-.endif
+    .if A
+    .endif
 
-.macro printReg reg
+    .macro printReg reg
     push    {r0 - r4, lr}       @ save regs
     mov     r2, R\reg           @ for the %d
     mov     r3, R\reg           @ for the %x
@@ -19,21 +19,21 @@
     str     r3, {sp, #16}^
     bl      _printf @ call printf
     add     sp, sp, #32
-    pop     {r0 - r4, lr}@ restore regs
-.endm
+    pop     {r0 - r4, lr} @ restore regs
+    .endm
 
-.macro printStr str
+    .macro printStr str
     push    {r0 - r4, lr}       @ save regs
     ldr     r0, =1f             @ load print str
     bl      _printf             @ call printf
     pop     {r0 - r4, lr}       @ restore regs
     b       2f                  @ branch around str
 1:      .asciz  "\str\n"
-.align 4
+    .align 4
 2:
-.endm
+    .endm
 
-.data
+    .data
 ptfstr: .asciz  "R%c = %16d, 0x%08x\n"
-.align 4
-.text
+    .align 4
+    .text

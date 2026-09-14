@@ -24,12 +24,12 @@ class DeferredImpl<T> implements Deferred<T> {
   }
   resolve(value?: T | PromiseLike<T>) {
     // eslint-disable-next-line prefer-rest-params
-    this._resolve.apply(this.scope ? this.scope : this, arguments);
+    this._resolve.apply(this.scope ? this.scope : this, arguments as any);
     this._resolved = true;
   }
   reject(reason?: any) {
     // eslint-disable-next-line prefer-rest-params
-    this._reject.apply(this.scope ? this.scope : this, arguments);
+    this._reject.apply(this.scope ? this.scope : this, arguments as any);
     this._rejected = true;
   }
   get promise(): Promise<T> {

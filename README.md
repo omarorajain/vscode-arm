@@ -1,7 +1,9 @@
-# ARM Assembly Language support for Visual Studio Code
-A [Visual Studio Code](https://code.visualstudio.com/) [extension](https://marketplace.visualstudio.com/items?itemName=Mikhail-Arkhipov.armassemblyeditor) provides support for the [ARM Assembly language](https://developer.arm.com/documentation/dui0068/b/ARM-Instruction-Reference) when using GAS (GCC Assembler). 
+> **Note:** This is a slightly more modernized fork of the original `vscode-arm` extension by Mikhail Arkhipov. It fixes several formatting bugs regarding directives and comment alignments. 
 
-![ARM Assembly editor](https://github.com/MikhailArkhipov/vscode-arm/blob/main/images/Screen1.png?raw=true)
+# ARM Assembly Language support for Visual Studio Code
+A [Visual Studio Code](https://code.visualstudio.com/) [extension](https://marketplace.visualstudio.com/items?itemName=omarorajain.arm-assembly-editor-modern) provides support for the [ARM Assembly language](https://developer.arm.com/documentation/dui0068/b/ARM-Instruction-Reference) when using GAS (GCC Assembler). 
+
+![ARM Assembly editor](https://github.com/omarorajain/vscode-arm/blob/main/images/Screen1.png?raw=true)
 
 # Features
 Features include semantic coloring, tooltips/hover, completions, code formatting, basic syntax checking. Assembly syntax is [GAS/GCC](https://sourceware.org/binutils/docs/as/index.html#SEC_Contents)
@@ -25,13 +27,13 @@ and the following modifiers:
 To customize colors combine item with modifiers, like `directive.include`.
 
 ## Hover
-![ARM Assembly editor](https://github.com/MikhailArkhipov/vscode-arm/blob/main/images/Screen2.png?raw=true)
+![ARM Assembly editor](https://github.com/omarorajain/vscode-arm/blob/main/images/Screen2.png?raw=true)
 
 ## Completions
-![ARM Assembly editor](https://github.com/MikhailArkhipov/vscode-arm/blob/main/images/Screen4.png?raw=true)
+![ARM Assembly editor](https://github.com/omarorajain/vscode-arm/blob/main/images/Screen4.png?raw=true)
 
 ## Instruction documentation in browser
-![ARM Assembly editor](https://github.com/MikhailArkhipov/vscode-arm/blob/main/images/Screen3.png?raw=true)
+![ARM Assembly editor](https://github.com/omarorajain/vscode-arm/blob/main/images/Screen3.png?raw=true)
 
 ## Formatting
 Formatter by default automatically derives instruction set (architecture) as well as indentation and casing settings from the document. Options can be set to non-auto values in settings. 
@@ -40,16 +42,3 @@ Formatter by default automatically derives instruction set (architecture) as wel
 - ARM Assembler syntax is not supported. 
 - Syntax check is basic, the feature is far from complete and is diagnostics is off by default.
 - Formatting does not support using tabs. Tabs are converted to spaces.
-
-# Acknowledgements
-- Documentation on ARM instructions comes from [ARM Documentation site](https://developer.arm.com/downloads/-/exploration-tools).
-- The code is partially based on my work when at Microsoft: [R Tools for VS Code](https://github.com/MikhailArkhipov/vscode-r), which, in turn, was forked off [Microsoft RTVS](https://github.com/microsoft/rtvs). Mostly tokenizer and parser, translated from C# to TypeScript, simplified and adapted for assembly language syntax. 
-- Some original C# code was already translated to TypeScript in [Pyright](https://github.com/microsoft/pyright), hence small amount was taken from there (fragments primarily related to the tokenization and supporting classes).
-- Documentation on instruction was extracted from ARM doc archives downloaded from [here](https://developer.arm.com/downloads/-/exploration-tools). All documentation belongs to Arm Limited. 
-- Documentation on directives in hover tooltips is fetched online directly from the [GAS Web site](https://sourceware.org/binutils/docs/as/index.html#SEC_Contents).
-
-# Bugs and feedback
-Feel free to file bugs and suggestions at [vscode-arm](https://github.com/MikhailArkhipov/vscode-arm) repo.
-
-
-
