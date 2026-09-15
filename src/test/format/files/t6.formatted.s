@@ -7,9 +7,9 @@
     .endif
 
     .macro printReg reg
-    push    {r0 - r4, lr}       @ save regs
-    mov     r2, R\reg           @ for the %d
-    mov     r3, R\reg           @ for the %x
+    push    {r0 - r4, lr} @ save regs
+    mov     r2, R\reg     @ for the %d
+    mov     r3, R\reg     @ for the %x
     mov     r1, #\reg
     add     r1, #'0'\reg @ for %c
     add     r1, 0\reg
@@ -23,11 +23,11 @@
     .endm
 
     .macro printStr str
-    push    {r0 - r4, lr}       @ save regs
-    ldr     r0, =1f             @ load print str
-    bl      _printf             @ call printf
-    pop     {r0 - r4, lr}       @ restore regs
-    b       2f                  @ branch around str
+    push    {r0 - r4, lr} @ save regs
+    ldr     r0, =1f       @ load print str
+    bl      _printf       @ call printf
+    pop     {r0 - r4, lr} @ restore regs
+    b       2f            @ branch around str
 1:      .asciz  "\str\n"
     .align 4
 2:

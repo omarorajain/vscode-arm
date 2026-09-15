@@ -35,8 +35,9 @@ export class Formatter {
   private _dataDirectivesOperandIndent: number;
   private _commentGroups: readonly CommentGroup[];
 
-  private _lines: string[] = [];
+  private _lines: { code: string; comment?: string }[] = [];
   private _lineParts: string[] = [];
+  private _currentEolComment?: string;
   private _lineNumber = 0;
   private _lineStart = 0;
 
@@ -55,6 +56,7 @@ export class Formatter {
     this._options = options;
 
     this._lines = [];
+    this._currentEolComment = undefined;
     this._tokens.position = 0;
     this._commentGroups = detectCommentAlignment(tokens);
 
@@ -64,7 +66,7 @@ export class Formatter {
     this._dataDirectivesIndent = indents.dataDirectivesIndent;
     this._dataDirectivesOperandIndent = indents.dataDirectivesOperandIndent;
 
-    // Format line by line.
+    // Format line by line and separate code from EOL comments
     while (!this._tokens.isEndOfStream()) {
       const ct = this._tokens.currentToken;
       // Handle empty line
@@ -87,7 +89,44 @@ export class Formatter {
       this.formatLine();
     }
 
-    let result = this._lines.join('\n');
+    // Align EOL comments in blocks
+    const finalLines: string[] = [];
+    let i = 0;
+    
+    while (i < this._lines.length) {
+      const line = this._lines[i];
+      if (!line.comment) {
+        finalLines.push(line.code);
+        i++;
+        continue;
+      }
+
+      // Find end and max length
+      const blockStart = i;
+      let blockEnd = i;
+      let maxLength = line.code.length;
+
+      while (blockEnd + 1 < this._lines.length && this._lines[blockEnd + 1].comment) {
+        blockEnd++;
+        maxLength = Math.max(maxLength, this._lines[blockEnd].code.length);
+      }
+
+      // Apply Clang-style alignment
+      for (let j = blockStart; j <= blockEnd; j++) {
+        const currentLine = this._lines[j];
+        if (this._options.alignEolComments) {
+          const padding = Math.max(1, maxLength - currentLine.code.length + 1);
+          const spaces = currentLine.code.length > 0 ? makeWhitespace(padding) : "";
+          finalLines.push(currentLine.code + spaces + currentLine.comment);
+        } else {
+          const padding = currentLine.code.length > 0 ? ' ' : '';
+          finalLines.push(currentLine.code + padding + currentLine.comment);
+        }
+      }
+      i = blockEnd + 1;
+    }
+
+    let result = finalLines.join('\n');
     // Make sure there is a line break at the end.
     if (result.length > 0 && !Character.isNewLine(result.charCodeAt(result.length - 1))) {
       result = result + '\n';
@@ -279,27 +318,41 @@ export class Formatter {
   }
 
   private appendLineComment() {
-    // Ignore AArch64 relocation modifiers
     const ct = this._tokens.currentToken;
-    const text = this._text.getText(ct.start, ct.length).toUpperCase();
-    if (text.startsWith('@PAGE') || text.startsWith('@GOT') || text.startsWith('@LO12') || text.startsWith('@TPREL')) {
-      this.appendWhitespace();
-      this.appendToken(ct);
-      return;
+    const rawText = this._text.getText(ct.start, ct.length);
+    const textUpper = rawText.toUpperCase();
+    
+    // Check for relocation modifier
+    if (textUpper.startsWith('@PAGE') || textUpper.startsWith('@GOT') || textUpper.startsWith('@LO12') || textUpper.startsWith('@TPREL')) {
+      
+      // Split modifier from actual comment
+      const match = rawText.match(/^(@[a-zA-Z0-9_]+)(.*)$/);
+      if (match) {
+        const modifier = match[1];
+        const remainder = match[2].trim();
+        
+        this.appendWhitespace();
+        this._lineParts.push(modifier);
+        
+        if (remainder) {
+          if (this._currentEolComment) {
+            this._currentEolComment += ' ' + remainder;
+          } else {
+            this._currentEolComment = remainder;
+          }
+        }
+        
+        this._tokens.moveToNextToken();
+        return;
+      }
     }
 
-    // Find out which group the comment belongs to
+    // Normal comment handling
     if (this._lineParts.length === 0) {
       // Only align standalone comments
       this.appendStandaloneLineComment();
     } else {
-      if (this._options.alignEolComments) {
-        this.appendEndOfLineComment();
-      } else {
-        // When comment trailers operands, simply add a space.
-        this.appendWhitespace();
-        this.appendToken(this._tokens.currentToken);
-      }
+      this.appendEndOfLineComment();
     }
   }
 
@@ -329,31 +382,16 @@ export class Formatter {
   }
 
   private appendEndOfLineComment(): void {
-    const group = this.findCommentGroup(this._tokens.position, false);
-
-    let formattedLengthBeforeComment = 0;
-    this._lineParts.forEach((p) => (formattedLengthBeforeComment += p.length));
-
-    const mostCommonIndent = group.getMostCommonIndent();
-
-    // Standalone comments
-    if (group.indices.length === 1) {
-      const ws = Math.max(1, mostCommonIndent - formattedLengthBeforeComment);
-      this._lineParts.push(makeWhitespace(ws));
-      this.appendToken(this._tokens.currentToken);
-      return;
+    const ct = this._tokens.currentToken;
+    const text = this._text.getText(ct.start, ct.length);
+    
+    if (this._currentEolComment) {
+      this._currentEolComment += ' ' + text;
+    } else {
+      this._currentEolComment = text;
     }
-
-    // Blocks of comments
-    let ws = mostCommonIndent - formattedLengthBeforeComment;
-
-    if (ws < 1) {
-      const nextTabStop = Math.ceil((formattedLengthBeforeComment + 2) / 8) * 8;
-      ws = nextTabStop - formattedLengthBeforeComment;
-    }
-
-    this._lineParts.push(makeWhitespace(ws));
-    this.appendToken(this._tokens.currentToken);
+    
+    this._tokens.moveToNextToken();
   }
 
   private appendBlockComment(): void {
@@ -514,27 +552,22 @@ export class Formatter {
   }
 
   private completeCurrentLine(force = false): void {
-    if (force || this._lineParts.length > 0) {
-      // Finish current line. Note this completes the resulting line
-      // while current token in the stream may not be EOL just yet.
-      // Consider that this is invoked when adding line break
-      // after a label, if options call for labels on separate lines.
+    if (force || this._lineParts.length > 0 || this._currentEolComment) {
       const lineText = this._lineParts.join('').trimEnd();
-      this._lines.push(lineText);
+      this._lines.push({ code: lineText, comment: this._currentEolComment });
     }
-    // Handle EOL token.
     if (this._tokens.currentToken.type === TokenType.EndOfLine) {
       this._lineStart = this._tokens.currentToken.end;
       this._tokens.moveToNextToken();
     }
     this._lineParts = [];
+    this._currentEolComment = undefined;
   }
 
   private appendEmptyLine(): void {
-    if (this._lines.length > 0 && this._lineParts.length === 0) {
-      // Make sure we are not adding yet another empty line.
-      const prevLineLength = this._lines[this._lines.length - 1].length;
-      if (prevLineLength === 0) {
+    if (this._lines.length > 0 && this._lineParts.length === 0 && !this._currentEolComment) {
+      const prevLine = this._lines[this._lines.length - 1];
+      if (prevLine.code.length === 0 && !prevLine.comment) {
         this._tokens.moveToNextToken();
         return;
       }
@@ -546,12 +579,10 @@ export class Formatter {
     const pt = this._tokens.previousToken;
     if (pt.type === TokenType.EndOfLine || pt.type === TokenType.EndOfStream) {
       const firstToken = this._tokens.currentToken;
-
       const text = this._text.getText(firstToken.start, firstToken.length);
       if (text.startsWith('#')) {
-        // Leave C preprocessor alone.
         this._tokens.moveToEol();
-        this._lines.push(this._text.getText(firstToken.start, this._tokens.previousToken.end - firstToken.start));
+        this._lines.push({ code: this._text.getText(firstToken.start, this._tokens.previousToken.end - firstToken.start) });
         this._lineStart = this._tokens.currentToken.end;
         this._lineNumber++;
         this._tokens.moveToNextToken();

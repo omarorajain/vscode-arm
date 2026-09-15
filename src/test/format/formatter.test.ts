@@ -166,9 +166,9 @@ test('EOL comment group', async () => {
 `,
   );
   expect(result).toBe(String.raw`
-    mov r0, #7    @i = 7
-    mov r1, #0    @c = 0
-    mov r2, #7    @a = 7
+    mov r0, #7 @i = 7
+    mov r1, #0 @c = 0
+    mov r2, #7 @a = 7
 `);
 });
 
@@ -186,12 +186,12 @@ test('EOL comment group with tabs', async () => {
     options,
   );
   expect(result).toBe(String.raw`
-    add r1, r1, r2              @c = c + a;
-    add r2, #1                  @a++
-    add r0, #1                  @i++
-    cmp r0, #6                  @is i > 6
-    bgt lessthan6               @keep looping if i is greater than 6
-    blt exit                    @exit if i is less than 6
+    add r1, r1, r2 @c = c + a;
+    add r2, #1     @a++
+    add r0, #1     @i++
+    cmp r0, #6     @is i > 6
+    bgt lessthan6  @keep looping if i is greater than 6
+    blt exit       @exit if i is less than 6
 `);
 });
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.4 (15 September 2026)
+- **Formatter:** Align end-of-line comments, improve comment handling, and update tests
+- **Modernized Build:** Upgrade dependencies
+
 ## 0.0.3 (13 September 2026)
 - **Formatter:** Fixed a bug where user setting for `arm.formatting.labelsCase` (`upper` or `lower`) was being ignored
 - **Settings:** Added an `off` option to `arm.formatting.labelsCase` and made it the default behavior
